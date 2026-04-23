@@ -30,12 +30,19 @@ struct ActiveHuntView: View {
         }
         .onAppear {
             viewModel.startSession(context: modelContext)
+            viewModel.enableKeepScreenOn()
         }
         .onDisappear {
             viewModel.endSession()
+            viewModel.disableKeepScreenOn()
         }
         .onChange(of: scenePhase) { _, phase in
-            if phase == .background { viewModel.endSession() }
+            if phase == .background {
+                viewModel.endSession()
+                viewModel.disableKeepScreenOn()
+            } else if phase == .active {
+                viewModel.enableKeepScreenOn()
+            }
         }
         .task(id: selectedPhoto) {
             guard let photo = selectedPhoto,
@@ -103,6 +110,19 @@ struct ActiveHuntView: View {
                 HapticService.shared.buttonTap()
                 viewModel.showShinyConfirmation = true
             }
+
+            Button {
+                viewModel.registerUndoReset()
+            } label: {
+                Label("-1", systemImage: "arrow.uturn.backward")
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+                    .background(Color(.tertiarySystemBackground), in: Capsule())
+            }
+            .accessibilityLabel("Annuler le dernier reset")
+            .disabled(hunt.attempts == 0)
         }
     }
 

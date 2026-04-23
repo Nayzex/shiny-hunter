@@ -18,6 +18,11 @@ struct ContentView: View {
                 .tabItem {
                     Label("Stats", systemImage: "chart.bar.fill")
                 }
+
+            SettingsView()
+                .tabItem {
+                    Label("Réglages", systemImage: "gearshape.fill")
+                }
         }
         .tint(Color.shinyGold)
     }

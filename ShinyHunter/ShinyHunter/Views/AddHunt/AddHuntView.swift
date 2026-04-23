@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 import PhotosUI
 
 struct AddHuntView: View {
@@ -6,6 +7,7 @@ struct AddHuntView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var viewModel = AddHuntViewModel()
+    @State private var selectedPhotoItem: PhotosPickerItem?
 
     var body: some View {
         NavigationStack {
@@ -29,6 +31,15 @@ struct AddHuntView: View {
                     .accessibilityLabel("Créer la chasse")
                 }
             }
+            .task(id: selectedPhotoItem) {
+                guard let item = selectedPhotoItem else { return }
+                viewModel.isLoadingImage = true
+                guard let rawData = try? await item.loadTransferable(type: Data.self) else {
+                    viewModel.isLoadingImage = false
+                    return
+                }
+                viewModel.processRawImageData(rawData)
+            }
             .alert("Erreur", isPresented: $viewModel.showError) {
                 Button("OK") {}
             } message: {
@@ -46,15 +57,12 @@ struct AddHuntView: View {
 
     private var photoSection: some View {
         Section("Photo (optionnel)") {
-            PhotosPicker(selection: $viewModel.selectedPhotoItem, matching: .images) {
+            PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
                 HStack {
                     photoPickerContent
                     Text(viewModel.imageData == nil ? "Choisir une photo" : "Modifier la photo")
                         .foregroundStyle(.primary)
                 }
-            }
-            .onChange(of: viewModel.selectedPhotoItem) { _, newItem in
-                viewModel.onPhotoSelected(newItem)
             }
         }
     }

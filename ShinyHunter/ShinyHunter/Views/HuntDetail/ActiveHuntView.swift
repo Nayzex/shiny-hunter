@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 import PhotosUI
 
 struct ActiveHuntView: View {
@@ -36,16 +37,18 @@ struct ActiveHuntView: View {
         .onChange(of: scenePhase) { _, phase in
             if phase == .background { viewModel.endSession() }
         }
-        .onChange(of: selectedPhoto) { _, newItem in
-            if let item = newItem { viewModel.updatePhoto(item) }
+        .task(id: selectedPhoto) {
+            guard let photo = selectedPhoto,
+                  let rawData = try? await photo.loadTransferable(type: Data.self) else { return }
+            viewModel.processRawImageData(rawData)
         }
-        .alert("✨ Shiny, vraiment !?", isPresented: $viewModel.showShinyConfirmation) {
-            Button("Oui !") { viewModel.confirmShiny(context: modelContext) }
+        .alert("✨ Shiny, vraiment !?", isPresented: Bindable(viewModel).showShinyConfirmation) {
+            Button("Oui !") { viewModel.confirmShiny() }
             Button("Annuler", role: .cancel) {}
         } message: {
             Text("Confirme que tu as trouvé un \(hunt.pokemonName) shiny !")
         }
-        .alert("Erreur", isPresented: $viewModel.showError) {
+        .alert("Erreur", isPresented: Bindable(viewModel).showError) {
             Button("OK") {}
         } message: {
             Text(viewModel.error?.errorDescription ?? "Erreur inconnue")

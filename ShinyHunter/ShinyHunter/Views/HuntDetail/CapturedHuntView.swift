@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 import PhotosUI
 
 struct CapturedHuntView: View {
@@ -25,13 +26,15 @@ struct CapturedHuntView: View {
             .padding()
         }
         .onAppear { startSparkleAnimation() }
-        .onChange(of: selectedPhoto) { _, newItem in
-            if let item = newItem { viewModel.updatePhoto(item) }
+        .task(id: selectedPhoto) {
+            guard let photo = selectedPhoto,
+                  let rawData = try? await photo.loadTransferable(type: Data.self) else { return }
+            viewModel.processRawImageData(rawData)
         }
         .sheet(isPresented: $showShareSheet) {
             ActivityView(activityItems: ShareService.shared.buildShareItems(for: hunt))
         }
-        .alert("Erreur", isPresented: $viewModel.showError) {
+        .alert("Erreur", isPresented: Bindable(viewModel).showError) {
             Button("OK") {}
         } message: {
             Text(viewModel.error?.errorDescription ?? "Erreur inconnue")

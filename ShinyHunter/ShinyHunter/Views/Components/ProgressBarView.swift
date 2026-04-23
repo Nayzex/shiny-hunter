@@ -27,6 +27,7 @@ struct ProgressBarView: View {
             }
         }
         .frame(height: 12)
+        .accessibilityLabel("Progression vers le shiny")
         .accessibilityValue(String(format: "%.0f pourcent", progress * 100))
     }
 }

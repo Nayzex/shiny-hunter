@@ -9,6 +9,7 @@ struct CounterDisplayView: View {
             Text("\(attempts)")
                 .font(.system(size: 72, weight: .heavy, design: .rounded))
                 .contentTransition(.numericText())
+                .animation(.default, value: attempts)
                 .foregroundStyle(.primary)
                 .accessibilityValue("\(attempts) sur \(targetAttempts) tentatives")
 

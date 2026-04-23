@@ -19,6 +19,7 @@ struct ProbabilityView: View {
                 .font(.title3.monospacedDigit())
                 .foregroundStyle(probabilityColor)
                 .contentTransition(.numericText())
+                .animation(.default, value: probability)
         }
         .font(.title3)
     }

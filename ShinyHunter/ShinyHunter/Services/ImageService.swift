@@ -1,4 +1,3 @@
-import PhotosUI
 import UIKit
 
 final class ImageService {
@@ -8,11 +7,8 @@ final class ImageService {
     private let maxImageSize: CGFloat = 512
     private let compressionQuality: CGFloat = 0.7
 
-    func process(_ item: PhotosPickerItem) async throws -> Data {
-        guard let data = try await item.loadTransferable(type: Data.self) else {
-            throw AppError.imageProcessingFailed
-        }
-        guard let image = UIImage(data: data) else {
+    func process(_ rawData: Data) throws -> Data {
+        guard let image = UIImage(data: rawData) else {
             throw AppError.imageProcessingFailed
         }
         let resized = resize(image)

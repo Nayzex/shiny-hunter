@@ -68,6 +68,8 @@ struct StatsView: View {
         }
         .frame(maxWidth: .infinity)
         .cardStyle()
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(title) : \(value)")
     }
 
     private var chartSection: some View {

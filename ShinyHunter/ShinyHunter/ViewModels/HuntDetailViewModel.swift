@@ -1,6 +1,5 @@
 import Foundation
 import SwiftData
-import PhotosUI
 
 @Observable
 final class HuntDetailViewModel {
@@ -44,7 +43,7 @@ final class HuntDetailViewModel {
         Task { await notificationService.scheduleReminder(for: hunt, afterDays: 3) }
     }
 
-    func confirmShiny(context: ModelContext) {
+    func confirmShiny() {
         hunt.attempts += 1
         hunt.isShiny = true
         hunt.capturedAt = Date()
@@ -54,15 +53,13 @@ final class HuntDetailViewModel {
         notificationService.cancelReminder(for: hunt)
     }
 
-    func updatePhoto(_ item: PhotosPickerItem) {
-        Task {
-            do {
-                hunt.imageData = try await ImageService.shared.process(item)
-            } catch {
-                self.error = .imageProcessingFailed
-                showError = true
-                HapticService.shared.error()
-            }
+    func processRawImageData(_ rawData: Data) {
+        do {
+            hunt.imageData = try ImageService.shared.process(rawData)
+        } catch {
+            self.error = .imageProcessingFailed
+            showError = true
+            HapticService.shared.error()
         }
     }
 }

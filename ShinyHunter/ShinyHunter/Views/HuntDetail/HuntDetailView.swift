@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct HuntDetailView: View {
     let hunt: PokemonHunt

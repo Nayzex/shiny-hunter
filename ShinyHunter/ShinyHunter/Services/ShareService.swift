@@ -25,3 +25,7 @@ struct ActivityView: UIViewControllerRepresentable {
 
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
+
+#Preview {
+    ActivityView(activityItems: ["✨ SHINY TROUVÉ ! Dialga après 1247 tentatives ! #ShinyHunter #Pokemon"])
+}

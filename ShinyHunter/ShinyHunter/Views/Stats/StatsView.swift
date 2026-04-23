@@ -56,7 +56,7 @@ struct StatsView: View {
         VStack(spacing: 8) {
             Image(systemName: icon)
                 .font(.title2)
-                .foregroundStyle(Color.shinyGold)
+                .foregroundStyle(ThemeManager.shared.accentColor)
                 .accessibilityHidden(true)
             Text(value)
                 .font(.system(size: 28, weight: .heavy, design: .rounded))
@@ -81,7 +81,7 @@ struct StatsView: View {
                     x: .value("Pokémon", hunt.pokemonName),
                     y: .value("Tentatives", hunt.attempts)
                 )
-                .foregroundStyle(Color.shinyGold.gradient)
+                .foregroundStyle(ThemeManager.shared.accentColor.gradient)
             }
             .frame(height: 200)
             .chartXAxis {
@@ -100,7 +100,7 @@ struct StatsView: View {
                 .font(.headline)
             Text(viewModel.overallLuckRating(from: allHunts))
                 .font(.title2.bold())
-                .foregroundStyle(Color.shinyGold)
+                .foregroundStyle(ThemeManager.shared.accentColor)
         }
         .frame(maxWidth: .infinity)
         .cardStyle()

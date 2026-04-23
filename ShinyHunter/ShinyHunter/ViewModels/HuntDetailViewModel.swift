@@ -53,7 +53,7 @@ final class HuntDetailViewModel {
         hunt.lastActivityAt = Date()
         hapticService.normalReset()
         soundService.playNormalReset()
-        Task { await notificationService.scheduleReminder(for: hunt, afterDays: 3) }
+        Task { await notificationService.scheduleReminder(for: hunt) }
     }
 
     func registerUndoReset() {

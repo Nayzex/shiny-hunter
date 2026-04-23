@@ -6,14 +6,14 @@ struct StreakBadgeView: View {
     var body: some View {
         HStack(spacing: 6) {
             Image(systemName: "flame.fill")
-                .foregroundStyle(Color.shinyGold)
+                .foregroundStyle(ThemeManager.shared.accentColor)
                 .accessibilityHidden(true)
             Text("Session actuelle : \(currentSessionResets) resets")
                 .font(.subheadline.bold())
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 6)
-        .background(Color.shinyGold.opacity(0.15))
+        .background(ThemeManager.shared.accentColor.opacity(0.15))
         .clipShape(Capsule())
         .accessibilityLabel("Session actuelle : \(currentSessionResets) resets")
     }

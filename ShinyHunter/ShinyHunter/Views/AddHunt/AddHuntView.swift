@@ -82,7 +82,7 @@ struct AddHuntView: View {
                 .accessibilityLabel("Photo sélectionnée")
         } else {
             Image(systemName: "photo.badge.plus")
-                .foregroundStyle(Color.shinyGold)
+                .foregroundStyle(ThemeManager.shared.accentColor)
                 .accessibilityHidden(true)
         }
     }

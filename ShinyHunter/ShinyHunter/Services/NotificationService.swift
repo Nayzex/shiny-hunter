@@ -14,10 +14,11 @@ final class NotificationService {
     }
 
     /// Planifie une notification de rappel pour une chasse inactive.
-    /// - Parameters:
-    ///   - hunt: La chasse pour laquelle planifier le rappel.
-    ///   - afterDays: Nombre de jours d'inactivité avant la notification.
-    func scheduleReminder(for hunt: PokemonHunt, afterDays: Int) async {
+    /// Le délai est lu depuis UserDefaults (clé `notificationDelayDays`, défaut 3 jours).
+    func scheduleReminder(for hunt: PokemonHunt) async {
+        let stored = UserDefaults.standard.integer(forKey: "notificationDelayDays")
+        let afterDays = stored > 0 ? stored : 3
+
         let center = UNUserNotificationCenter.current()
         let identifier = hunt.id.uuidString
 

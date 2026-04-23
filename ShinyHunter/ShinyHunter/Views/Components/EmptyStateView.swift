@@ -13,7 +13,7 @@ struct EmptyStateView: View {
         VStack(spacing: 16) {
             Image(systemName: icon)
                 .font(.system(size: 60))
-                .foregroundStyle(Color.shinyGold.opacity(0.8))
+                .foregroundStyle(ThemeManager.shared.accentColor.opacity(0.8))
                 .accessibilityHidden(true)
             Text(message)
                 .font(.headline)

@@ -9,7 +9,7 @@ struct CapturedRowView: View {
                 PokemonImageView(imageData: hunt.imageData, pokemonName: hunt.pokemonName, size: 56)
                 Image(systemName: "sparkles")
                     .font(.caption.bold())
-                    .foregroundStyle(Color.shinyGold)
+                    .foregroundStyle(ThemeManager.shared.accentColor)
                     .offset(x: 4, y: -4)
                     .accessibilityHidden(true)
             }

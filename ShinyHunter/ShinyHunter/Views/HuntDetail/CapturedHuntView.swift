@@ -46,7 +46,7 @@ struct CapturedHuntView: View {
             PokemonImageView(imageData: hunt.imageData, pokemonName: hunt.pokemonName, size: 200)
             Image(systemName: "sparkles")
                 .font(.system(size: 48))
-                .foregroundStyle(Color.shinyGold)
+                .foregroundStyle(ThemeManager.shared.accentColor)
                 .scaleEffect(sparkleScale)
                 .opacity(sparkleOpacity)
                 .accessibilityHidden(true)
@@ -60,7 +60,7 @@ struct CapturedHuntView: View {
                 .foregroundStyle(.secondary)
             Text("\(hunt.attempts) tentatives !")
                 .font(.system(size: 36, weight: .heavy, design: .rounded))
-                .foregroundStyle(Color.shinyGold)
+                .foregroundStyle(ThemeManager.shared.accentColor)
 
             if let capturedAt = hunt.capturedAt {
                 Text("Le \(capturedAt.shortFormatted)")
@@ -75,7 +75,7 @@ struct CapturedHuntView: View {
 
             Text(ShinyMath.luckRating(attempts: hunt.attempts, rate: hunt.targetAttempts))
                 .font(.title3.bold())
-                .foregroundStyle(Color.shinyGold)
+                .foregroundStyle(ThemeManager.shared.accentColor)
         }
         .cardStyle()
     }
@@ -88,7 +88,7 @@ struct CapturedHuntView: View {
             } label: {
                 Label("Partager", systemImage: "square.and.arrow.up")
                     .frame(maxWidth: .infinity, minHeight: 52)
-                    .background(Color.shinyGold)
+                    .background(ThemeManager.shared.accentColor)
                     .foregroundStyle(.black)
                     .font(.headline)
                     .clipShape(RoundedRectangle(cornerRadius: 14))

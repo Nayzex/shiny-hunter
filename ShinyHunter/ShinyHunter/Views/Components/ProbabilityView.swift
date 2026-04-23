@@ -11,7 +11,7 @@ struct ProbabilityView: View {
     var body: some View {
         HStack {
             Image(systemName: "chart.line.uptrend.xyaxis")
-                .foregroundStyle(Color.shinyGold)
+                .foregroundStyle(ThemeManager.shared.accentColor)
                 .accessibilityHidden(true)
             Text("Probabilité cumulée : ")
                 .foregroundStyle(.secondary)
@@ -27,7 +27,7 @@ struct ProbabilityView: View {
     private var probabilityColor: Color {
         switch probability {
         case ..<50:    return .primary
-        case 50..<75:  return Color.shinyGold
+        case 50..<75:  return ThemeManager.shared.accentColor
         default:       return .orange
         }
     }

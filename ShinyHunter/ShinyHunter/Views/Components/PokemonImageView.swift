@@ -27,7 +27,7 @@ struct PokemonImageView: View {
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .overlay(
             RoundedRectangle(cornerRadius: 20)
-                .stroke(Color.shinyGold.opacity(0.4), lineWidth: 2)
+                .stroke(ThemeManager.shared.accentColor.opacity(0.4), lineWidth: 2)
         )
     }
 
@@ -37,7 +37,7 @@ struct PokemonImageView: View {
             .overlay(
                 Image(systemName: "photo.badge.plus")
                     .font(.system(size: size * 0.3))
-                    .foregroundStyle(Color.shinyGold.opacity(0.8))
+                    .foregroundStyle(ThemeManager.shared.accentColor.opacity(0.8))
             )
     }
 }

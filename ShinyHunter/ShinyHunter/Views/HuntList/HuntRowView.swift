@@ -33,7 +33,7 @@ struct HuntRowView: View {
         return VStack(spacing: 2) {
             Text(String(format: "%.0f%%", probability))
                 .font(.subheadline.bold().monospacedDigit())
-                .foregroundStyle(probability > 50 ? Color.shinyGold : .secondary)
+                .foregroundStyle(probability > 50 ? ThemeManager.shared.accentColor : .secondary)
             Text("cumulé")
                 .font(.caption2)
                 .foregroundStyle(.secondary)

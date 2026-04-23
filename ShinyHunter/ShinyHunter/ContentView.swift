@@ -24,7 +24,7 @@ struct ContentView: View {
                     Label("Réglages", systemImage: "gearshape.fill")
                 }
         }
-        .tint(Color.shinyGold)
+        .tint(ThemeManager.shared.accentColor)
     }
 }
 

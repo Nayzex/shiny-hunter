@@ -13,11 +13,11 @@ struct ProgressBarView: View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
                 Capsule()
-                    .fill(Color.shinyGold.opacity(0.2))
+                    .fill(ThemeManager.shared.accentColor.opacity(0.2))
                 Capsule()
                     .fill(
                         LinearGradient(
-                            colors: [Color.shinyGold, Color.shinyGreen],
+                            colors: [ThemeManager.shared.accentColor, Color.shinyGreen],
                             startPoint: .leading,
                             endPoint: .trailing
                         )

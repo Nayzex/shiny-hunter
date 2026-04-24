@@ -6,8 +6,9 @@ struct CapturedHuntView: View {
     let hunt: PokemonHunt
 
     @State private var viewModel: HuntDetailViewModel
-    @State private var selectedPhoto: PhotosPickerItem?
+    @State private var selectedShinyPhoto: PhotosPickerItem?
     @State private var showShareSheet = false
+    @State private var showNotes = false
     @State private var sparkleScale: CGFloat = 0.8
     @State private var sparkleOpacity: Double = 0.5
 
@@ -19,15 +20,16 @@ struct CapturedHuntView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
-                shinyImageSection
+                photosSection
                 infoSection
+                notesSection
                 shareSection
             }
             .padding()
         }
         .onAppear { startSparkleAnimation() }
-        .task(id: selectedPhoto) {
-            guard let photo = selectedPhoto,
+        .task(id: selectedShinyPhoto) {
+            guard let photo = selectedShinyPhoto,
                   let rawData = try? await photo.loadTransferable(type: Data.self) else { return }
             viewModel.processRawImageData(rawData)
         }
@@ -41,9 +43,56 @@ struct CapturedHuntView: View {
         }
     }
 
-    private var shinyImageSection: some View {
+    @ViewBuilder
+    private var photosSection: some View {
+        if hunt.normalImageData != nil {
+            sideBySidePhotos
+        } else {
+            shinyOnlyPhoto
+        }
+    }
+
+    private var sideBySidePhotos: some View {
+        HStack(spacing: 16) {
+            VStack(spacing: 6) {
+                PokemonImageView(
+                    imageData: hunt.normalImageData,
+                    pokemonName: hunt.pokemonName,
+                    size: 130
+                )
+                Text("Normal")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            VStack(spacing: 6) {
+                ZStack {
+                    PokemonImageView(
+                        imageData: hunt.imageData,
+                        pokemonName: hunt.pokemonName,
+                        size: 130
+                    )
+                    Image(systemName: "sparkles")
+                        .font(.system(size: 32))
+                        .foregroundStyle(ThemeManager.shared.accentColor)
+                        .scaleEffect(sparkleScale)
+                        .opacity(sparkleOpacity)
+                        .accessibilityHidden(true)
+                }
+                Text("✨ Shiny")
+                    .font(.caption)
+                    .foregroundStyle(ThemeManager.shared.accentColor)
+            }
+        }
+    }
+
+    private var shinyOnlyPhoto: some View {
         ZStack {
-            PokemonImageView(imageData: hunt.imageData, pokemonName: hunt.pokemonName, size: 200)
+            PokemonImageView(
+                imageData: hunt.imageData,
+                pokemonName: hunt.pokemonName,
+                size: 200
+            )
             Image(systemName: "sparkles")
                 .font(.system(size: 48))
                 .foregroundStyle(ThemeManager.shared.accentColor)
@@ -68,6 +117,18 @@ struct CapturedHuntView: View {
                     .foregroundStyle(.secondary)
             }
 
+            if !hunt.game.isEmpty, let game = PokemonGame(rawValue: hunt.game) {
+                Text(game.displayName)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+
+            if let method = HuntMethod(rawValue: hunt.huntMethod) {
+                Text(method.displayName)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
             Text(ShinyMath.probabilityOfFindingByNow(attempts: hunt.attempts, rate: hunt.targetAttempts))
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
@@ -76,6 +137,15 @@ struct CapturedHuntView: View {
             Text(ShinyMath.luckRating(attempts: hunt.attempts, rate: hunt.targetAttempts))
                 .font(.title3.bold())
                 .foregroundStyle(ThemeManager.shared.accentColor)
+        }
+        .cardStyle()
+    }
+
+    private var notesSection: some View {
+        DisclosureGroup("Notes", isExpanded: $showNotes) {
+            TextEditor(text: Bindable(hunt).notes)
+                .frame(minHeight: 80)
+                .accessibilityLabel("Notes sur cette capture")
         }
         .cardStyle()
     }
@@ -95,15 +165,15 @@ struct CapturedHuntView: View {
             }
             .accessibilityLabel("Partager cette capture")
 
-            PhotosPicker(selection: $selectedPhoto, matching: .images) {
-                Label("Modifier la photo", systemImage: "photo.badge.arrow.down")
+            PhotosPicker(selection: $selectedShinyPhoto, matching: .images) {
+                Label("Modifier la photo shiny", systemImage: "photo.badge.arrow.down")
                     .frame(maxWidth: .infinity, minHeight: 52)
                     .background(Color.cardBackground)
                     .foregroundStyle(.primary)
                     .font(.headline)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
-            .accessibilityLabel("Modifier la photo du Pokémon")
+            .accessibilityLabel("Modifier la photo shiny du Pokémon")
         }
     }
 
@@ -116,7 +186,7 @@ struct CapturedHuntView: View {
 }
 
 #Preview {
-    let hunt = PokemonHunt(pokemonName: "Mew")
+    let hunt = PokemonHunt(pokemonName: "Mew", game: .ecarlateViolet, huntMethod: .masuda)
     hunt.attempts = 342
     hunt.isShiny = true
     hunt.capturedAt = Date()

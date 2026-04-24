@@ -13,16 +13,23 @@ struct StatsView: View {
             ScrollView {
                 VStack(spacing: 16) {
                     summaryGrid
+                    dailyResetsSection
                     if !shinies.isEmpty {
                         chartSection
                         luckSection
                     }
+                    if !allHunts.isEmpty {
+                        recordsSection
+                    }
+                    badgesSection
                 }
                 .padding()
             }
             .navigationTitle("Statistiques")
         }
     }
+
+    // MARK: — Summary
 
     private var summaryGrid: some View {
         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
@@ -36,12 +43,6 @@ struct StatsView: View {
                 value: "\(shinies.count)",
                 icon: "sparkles"
             )
-            if let best = viewModel.bestHunt(from: allHunts) {
-                statCard(title: "Meilleure chasse", value: "\(best.attempts)", icon: "trophy.fill")
-            }
-            if let worst = viewModel.worstHunt(from: allHunts) {
-                statCard(title: "Pire chasse", value: "\(worst.attempts)", icon: "tortoise.fill")
-            }
             if !shinies.isEmpty {
                 statCard(
                     title: "Moyenne / shiny",
@@ -70,6 +71,30 @@ struct StatsView: View {
         .cardStyle()
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(title) : \(value)")
+    }
+
+    // MARK: — Graphiques
+
+    private var dailyResetsSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Resets sur 7 jours")
+                .font(.headline)
+            Chart(viewModel.dailyResets(from: allHunts)) { point in
+                BarMark(
+                    x: .value("Jour", point.date, unit: .day),
+                    y: .value("Resets", point.resets)
+                )
+                .foregroundStyle(ThemeManager.shared.accentColor.gradient)
+            }
+            .frame(height: 140)
+            .chartXAxis {
+                AxisMarks(values: .stride(by: .day)) { _ in
+                    AxisValueLabel(format: .dateTime.weekday(.abbreviated))
+                        .font(.caption)
+                }
+            }
+        }
+        .cardStyle()
     }
 
     private var chartSection: some View {
@@ -104,6 +129,102 @@ struct StatsView: View {
         }
         .frame(maxWidth: .infinity)
         .cardStyle()
+    }
+
+    // MARK: — Records
+
+    private var recordsSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Records")
+                .font(.headline)
+                .padding(.horizontal, 4)
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+                if let best = viewModel.bestHunt(from: allHunts) {
+                    recordCard(
+                        title: "Meilleure chasse",
+                        name: best.pokemonName,
+                        detail: "\(best.attempts) resets 🍀",
+                        icon: "trophy.fill"
+                    )
+                }
+                if let worst = viewModel.worstHunt(from: allHunts) {
+                    recordCard(
+                        title: "Pire chasse",
+                        name: worst.pokemonName,
+                        detail: "\(worst.attempts) resets",
+                        icon: "tortoise.fill"
+                    )
+                }
+                if let session = viewModel.longestCompletedSession(from: allHunts),
+                   let end = session.endedAt {
+                    recordCard(
+                        title: "Session la plus longue",
+                        name: "\(session.resetsInSession) resets",
+                        detail: end.timeIntervalSince(session.startedAt).durationFormatted,
+                        icon: "clock.fill"
+                    )
+                }
+                if let oldest = viewModel.oldestActiveHunt(from: allHunts) {
+                    recordCard(
+                        title: "En chasse depuis",
+                        name: oldest.pokemonName,
+                        detail: oldest.createdAt.relativeFormatted,
+                        icon: "calendar"
+                    )
+                }
+            }
+        }
+    }
+
+    private func recordCard(title: String, name: String, detail: String, icon: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Label(title, systemImage: icon)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .accessibilityHidden(true)
+            Text(name)
+                .font(.headline)
+                .lineLimit(1)
+            Text(detail)
+                .font(.subheadline.monospacedDigit())
+                .foregroundStyle(ThemeManager.shared.accentColor)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .cardStyle()
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(title) : \(name), \(detail)")
+    }
+
+    // MARK: — Badges
+
+    private var badgesSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Succès")
+                .font(.headline)
+                .padding(.horizontal, 4)
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4), spacing: 16) {
+                ForEach(Badge.allCases, id: \.rawValue) { badge in
+                    badgeCell(badge)
+                }
+            }
+        }
+        .cardStyle()
+    }
+
+    private func badgeCell(_ badge: Badge) -> some View {
+        let unlocked = BadgeService.shared.unlockedBadges.contains(badge)
+        return VStack(spacing: 4) {
+            Text(badge.emoji)
+                .font(.title2)
+                .grayscale(unlocked ? 0 : 1)
+                .accessibilityHidden(true)
+            Text(badge.title)
+                .font(.caption2)
+                .foregroundStyle(unlocked ? .primary : .tertiary)
+                .multilineTextAlignment(.center)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(badge.title) : \(unlocked ? "Obtenu" : "Non obtenu")")
     }
 }
 

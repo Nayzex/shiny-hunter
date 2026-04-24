@@ -5,7 +5,7 @@ struct HuntRowView: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            PokemonImageView(imageData: hunt.imageData, pokemonName: hunt.pokemonName, size: 56)
+            PokemonImageView(imageData: hunt.normalImageData ?? hunt.imageData, pokemonName: hunt.pokemonName, size: 56)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(hunt.pokemonName)
@@ -13,6 +13,7 @@ struct HuntRowView: View {
                 Text("\(hunt.attempts) / \(hunt.targetAttempts)")
                     .font(.subheadline.monospacedDigit())
                     .foregroundStyle(.secondary)
+                huntMetaBadges
             }
 
             Spacer()
@@ -23,6 +24,21 @@ struct HuntRowView: View {
         .cardStyle()
         .padding(.horizontal)
         .padding(.vertical, 4)
+    }
+
+    @ViewBuilder
+    private var huntMetaBadges: some View {
+        if let method = HuntMethod(rawValue: hunt.huntMethod), method != .softReset {
+            Text(method.displayName)
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+        }
+        if !hunt.game.isEmpty, let game = PokemonGame(rawValue: hunt.game) {
+            Text(game.displayName)
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+                .lineLimit(1)
+        }
     }
 
     private var probabilityBadge: some View {
@@ -42,7 +58,7 @@ struct HuntRowView: View {
 }
 
 #Preview {
-    let hunt = PokemonHunt(pokemonName: "Dialga")
+    let hunt = PokemonHunt(pokemonName: "Dialga", game: .diamantPerlePlatine, huntMethod: .softReset)
     hunt.attempts = 1247
     return HuntRowView(hunt: hunt)
         .padding()

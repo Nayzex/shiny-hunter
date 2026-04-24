@@ -7,10 +7,13 @@ struct ActiveHuntView: View {
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
+    @Query private var allHunts: [PokemonHunt]
 
     @State private var viewModel: HuntDetailViewModel
     @State private var showHistory = false
-    @State private var selectedPhoto: PhotosPickerItem?
+    @State private var showHuntInfo = false
+    @State private var showNotes = false
+    @State private var selectedNormalPhoto: PhotosPickerItem?
 
     init(hunt: PokemonHunt) {
         self.hunt = hunt
@@ -22,8 +25,11 @@ struct ActiveHuntView: View {
             VStack(spacing: 24) {
                 headerSection
                 counterSection
+                paceSection
                 probabilitySection
                 actionSection
+                huntInfoSection
+                notesSection
                 historySection
             }
             .padding()
@@ -44,13 +50,13 @@ struct ActiveHuntView: View {
                 viewModel.enableKeepScreenOn()
             }
         }
-        .task(id: selectedPhoto) {
-            guard let photo = selectedPhoto,
+        .task(id: selectedNormalPhoto) {
+            guard let photo = selectedNormalPhoto,
                   let rawData = try? await photo.loadTransferable(type: Data.self) else { return }
-            viewModel.processRawImageData(rawData)
+            viewModel.processNormalImageData(rawData)
         }
         .alert("✨ Shiny, vraiment !?", isPresented: Bindable(viewModel).showShinyConfirmation) {
-            Button("Oui !") { viewModel.confirmShiny() }
+            Button("Oui !") { viewModel.confirmShiny(allHunts: allHunts) }
             Button("Annuler", role: .cancel) {}
         } message: {
             Text("Confirme que tu as trouvé un \(hunt.pokemonName) shiny !")
@@ -64,13 +70,32 @@ struct ActiveHuntView: View {
 
     private var headerSection: some View {
         VStack(spacing: 12) {
-            PhotosPicker(selection: $selectedPhoto, matching: .images) {
-                PokemonImageView(imageData: hunt.imageData, pokemonName: hunt.pokemonName, size: 160)
+            PhotosPicker(selection: $selectedNormalPhoto, matching: .images) {
+                PokemonImageView(
+                    imageData: hunt.normalImageData ?? hunt.imageData,
+                    pokemonName: hunt.pokemonName,
+                    size: 160
+                )
             }
             .accessibilityLabel("Modifier la photo de \(hunt.pokemonName)")
 
             Text(hunt.pokemonName)
                 .font(.largeTitle.bold())
+
+            methodBadge
+        }
+    }
+
+    @ViewBuilder
+    private var methodBadge: some View {
+        if let method = HuntMethod(rawValue: hunt.huntMethod) {
+            Text(method.displayName)
+                .font(.caption.weight(.medium))
+                .foregroundStyle(ThemeManager.shared.accentColor)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+                .background(ThemeManager.shared.accentColor.opacity(0.12), in: Capsule())
+                .accessibilityLabel("Méthode : \(method.displayName)")
         }
     }
 
@@ -80,6 +105,23 @@ struct ActiveHuntView: View {
             ProgressBarView(attempts: hunt.attempts, targetAttempts: hunt.targetAttempts)
         }
         .cardStyle()
+    }
+
+    @ViewBuilder
+    private var paceSection: some View {
+        if let pace = viewModel.paceDescription {
+            HStack(spacing: 8) {
+                Image(systemName: "speedometer")
+                    .foregroundStyle(ThemeManager.shared.accentColor)
+                    .accessibilityHidden(true)
+                Text(pace)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .cardStyle()
+            .accessibilityLabel(pace)
+        }
     }
 
     private var probabilitySection: some View {
@@ -99,7 +141,7 @@ struct ActiveHuntView: View {
                 icon: "arrow.counterclockwise",
                 color: .normalRed
             ) {
-                viewModel.registerNormalReset()
+                viewModel.registerNormalReset(allHunts: allHunts)
             }
 
             ActionButton(
@@ -126,6 +168,40 @@ struct ActiveHuntView: View {
         }
     }
 
+    private var huntInfoSection: some View {
+        DisclosureGroup("Infos de chasse", isExpanded: $showHuntInfo) {
+            Picker("Méthode", selection: Binding(
+                get: { HuntMethod(rawValue: hunt.huntMethod) ?? .softReset },
+                set: { viewModel.updateHuntMethod($0) }
+            )) {
+                ForEach(HuntMethod.allCases, id: \.rawValue) { method in
+                    Text(method.displayName).tag(method)
+                }
+            }
+            .accessibilityLabel("Méthode de chasse")
+
+            Picker("Jeu", selection: Binding(
+                get: { PokemonGame(rawValue: hunt.game) ?? .unspecified },
+                set: { viewModel.updateGame($0) }
+            )) {
+                ForEach(PokemonGame.allCases, id: \.rawValue) { game in
+                    Text(game.displayName).tag(game)
+                }
+            }
+            .accessibilityLabel("Jeu Pokémon")
+        }
+        .cardStyle()
+    }
+
+    private var notesSection: some View {
+        DisclosureGroup("Notes", isExpanded: $showNotes) {
+            TextEditor(text: Bindable(hunt).notes)
+                .frame(minHeight: 80)
+                .accessibilityLabel("Notes sur cette chasse")
+        }
+        .cardStyle()
+    }
+
     private var historySection: some View {
         DisclosureGroup("Historique des sessions", isExpanded: $showHistory) {
             if hunt.sessions.isEmpty {
@@ -141,7 +217,7 @@ struct ActiveHuntView: View {
 }
 
 #Preview {
-    let hunt = PokemonHunt(pokemonName: "Dialga")
+    let hunt = PokemonHunt(pokemonName: "Dialga", huntMethod: .softReset)
     hunt.attempts = 1247
     return NavigationStack {
         ActiveHuntView(hunt: hunt)

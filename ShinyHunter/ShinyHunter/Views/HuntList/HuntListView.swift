@@ -3,6 +3,7 @@ import SwiftData
 
 struct HuntListView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(AppDelegate.self) private var delegate
     @Query(
         filter: #Predicate<PokemonHunt> { !$0.isShiny },
         sort: \PokemonHunt.lastActivityAt,
@@ -16,6 +17,18 @@ struct HuntListView: View {
         NavigationStack {
             content
                 .navigationTitle("En cours")
+                .onAppear {
+                    if delegate.pendingShowAddHunt {
+                        delegate.pendingShowAddHunt = false
+                        viewModel.showAddHunt = true
+                    }
+                }
+                .onChange(of: delegate.pendingShowAddHunt) { _, newValue in
+                    if newValue {
+                        delegate.pendingShowAddHunt = false
+                        viewModel.showAddHunt = true
+                    }
+                }
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
                         Button {
@@ -72,5 +85,6 @@ struct HuntListView: View {
 
 #Preview {
     HuntListView()
+        .environment(AppDelegate())
         .modelContainer(for: [PokemonHunt.self, HuntSession.self], inMemory: true)
 }

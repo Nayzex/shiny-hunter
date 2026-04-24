@@ -10,13 +10,39 @@
 		A290F7392F993E6A00DBCC21 /* CLAUDE.md in Resources */ = {isa = PBXBuildFile; fileRef = A290F7382F993E6A00DBCC21 /* CLAUDE.md */; };
 		A290F73B2F993E8600DBCC21 /* QUALITY.md in Resources */ = {isa = PBXBuildFile; fileRef = A290F73A2F993E8600DBCC21 /* QUALITY.md */; };
 		A290F7872F9AA48B00DBCC21 /* FEATURES.md in Resources */ = {isa = PBXBuildFile; fileRef = A290F7862F9AA48B00DBCC21 /* FEATURES.md */; };
+		A290F7BA2F9BB10000DBCC21 /* ShinyHunterWidget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A290F7B02F9BB10000DBCC21 /* ShinyHunterWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A290F7BC2F9BB10000DBCC21 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A290F7202F993CA300DBCC21 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A290F7B22F9BB10000DBCC21;
+			remoteInfo = ShinyHunterWidget;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A290F7B92F9BB10000DBCC21 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A290F7BA2F9BB10000DBCC21 /* ShinyHunterWidget.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		A290F7282F993CA300DBCC21 /* ShinyHunter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShinyHunter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A290F7382F993E6A00DBCC21 /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CLAUDE.md; sourceTree = "<group>"; };
 		A290F73A2F993E8600DBCC21 /* QUALITY.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = QUALITY.md; sourceTree = "<group>"; };
 		A290F7862F9AA48B00DBCC21 /* FEATURES.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = FEATURES.md; sourceTree = "<group>"; };
+		A290F7B02F9BB10000DBCC21 /* ShinyHunterWidget.appex */ = {isa = PBXFileReference; explicitFileType = wrapper.app-extension; includeInIndex = 0; path = ShinyHunterWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -25,10 +51,22 @@
 			path = ShinyHunter;
 			sourceTree = "<group>";
 		};
+		A290F7B12F9BB10000DBCC21 /* ShinyHunterWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ShinyHunterWidget;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A290F7252F993CA300DBCC21 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A290F7B42F9BB10000DBCC21 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -42,6 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				A290F72A2F993CA300DBCC21 /* ShinyHunter */,
+				A290F7B12F9BB10000DBCC21 /* ShinyHunterWidget */,
 				A290F7292F993CA300DBCC21 /* Products */,
 				A290F7382F993E6A00DBCC21 /* CLAUDE.md */,
 				A290F73A2F993E8600DBCC21 /* QUALITY.md */,
@@ -53,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				A290F7282F993CA300DBCC21 /* ShinyHunter.app */,
+				A290F7B02F9BB10000DBCC21 /* ShinyHunterWidget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -67,10 +107,12 @@
 				A290F7242F993CA300DBCC21 /* Sources */,
 				A290F7252F993CA300DBCC21 /* Frameworks */,
 				A290F7262F993CA300DBCC21 /* Resources */,
+				A290F7B92F9BB10000DBCC21 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				A290F7BB2F9BB10000DBCC21 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				A290F72A2F993CA300DBCC21 /* ShinyHunter */,
@@ -81,6 +123,28 @@
 			productName = ShinyHunter;
 			productReference = A290F7282F993CA300DBCC21 /* ShinyHunter.app */;
 			productType = "com.apple.product-type.application";
+		};
+		A290F7B22F9BB10000DBCC21 /* ShinyHunterWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A290F7B82F9BB10000DBCC21 /* Build configuration list for PBXNativeTarget "ShinyHunterWidget" */;
+			buildPhases = (
+				A290F7B32F9BB10000DBCC21 /* Sources */,
+				A290F7B42F9BB10000DBCC21 /* Frameworks */,
+				A290F7B52F9BB10000DBCC21 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				A290F7B12F9BB10000DBCC21 /* ShinyHunterWidget */,
+			);
+			name = ShinyHunterWidget;
+			packageProductDependencies = (
+			);
+			productName = ShinyHunterWidget;
+			productReference = A290F7B02F9BB10000DBCC21 /* ShinyHunterWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -93,6 +157,9 @@
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					A290F7272F993CA300DBCC21 = {
+						CreatedOnToolsVersion = 26.0.1;
+					};
+					A290F7B22F9BB10000DBCC21 = {
 						CreatedOnToolsVersion = 26.0.1;
 					};
 				};
@@ -112,6 +179,7 @@
 			projectRoot = "";
 			targets = (
 				A290F7272F993CA300DBCC21 /* ShinyHunter */,
+				A290F7B22F9BB10000DBCC21 /* ShinyHunterWidget */,
 			);
 		};
 /* End PBXProject section */
@@ -127,6 +195,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A290F7B52F9BB10000DBCC21 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -137,7 +212,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A290F7B32F9BB10000DBCC21 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A290F7BB2F9BB10000DBCC21 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A290F7B22F9BB10000DBCC21 /* ShinyHunterWidget */;
+			targetProxy = A290F7BC2F9BB10000DBCC21 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		A290F7332F993CA500DBCC21 /* Debug */ = {
@@ -266,11 +356,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ShinyHunter/ShinyHunter.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 33YRJF56Z4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Shiny Hunter utilise votre galerie pour associer une photo à votre Pokémon.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -298,11 +390,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ShinyHunter/ShinyHunter.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 33YRJF56Z4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Shiny Hunter utilise votre galerie pour associer une photo à votre Pokémon.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -316,6 +410,68 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nayzex.ShinyHunter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A290F7B62F9BB10000DBCC21 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = ShinyHunterWidget/ShinyHunterWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 33YRJF56Z4;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ShinyHunterWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../../Frameworks",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nayzex.ShinyHunter.ShinyHunterWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A290F7B72F9BB10000DBCC21 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = ShinyHunterWidget/ShinyHunterWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 33YRJF56Z4;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ShinyHunterWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../../Frameworks",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nayzex.ShinyHunter.ShinyHunterWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -342,6 +498,15 @@
 			buildConfigurations = (
 				A290F7362F993CA500DBCC21 /* Debug */,
 				A290F7372F993CA500DBCC21 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A290F7B82F9BB10000DBCC21 /* Build configuration list for PBXNativeTarget "ShinyHunterWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A290F7B62F9BB10000DBCC21 /* Debug */,
+				A290F7B72F9BB10000DBCC21 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

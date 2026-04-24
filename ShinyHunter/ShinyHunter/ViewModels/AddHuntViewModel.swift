@@ -6,6 +6,8 @@ final class AddHuntViewModel {
     var pokemonName = ""
     var hasCharmeChroma = false
     var imageData: Data?
+    var selectedGame: PokemonGame = .unspecified
+    var selectedMethod: HuntMethod = .softReset
     var error: AppError?
     var showError = false
     var isLoadingImage = false
@@ -15,7 +17,8 @@ final class AddHuntViewModel {
     }
 
     var displayRate: String {
-        hasCharmeChroma ? "Taux : 1 / 1365" : "Taux : 1 / 4096"
+        let target = selectedMethod.targetAttempts(hasCharmeChroma: hasCharmeChroma)
+        return "Taux : 1 / \(target)"
     }
 
     func processRawImageData(_ rawData: Data) {
@@ -29,7 +32,7 @@ final class AddHuntViewModel {
         isLoadingImage = false
     }
 
-    func createHunt(context: ModelContext) {
+    func createHunt(context: ModelContext, allHunts: [PokemonHunt]) {
         let trimmed = pokemonName.trimmingCharacters(in: .whitespaces)
         guard !trimmed.isEmpty else {
             error = .huntNameEmpty
@@ -37,8 +40,14 @@ final class AddHuntViewModel {
             HapticService.shared.error()
             return
         }
-        let hunt = PokemonHunt(pokemonName: trimmed, hasCharmeChroma: hasCharmeChroma)
-        hunt.imageData = imageData
+        BadgeService.shared.checkAfterCreation(allHunts: allHunts)
+        let hunt = PokemonHunt(
+            pokemonName: trimmed,
+            hasCharmeChroma: hasCharmeChroma,
+            game: selectedGame,
+            huntMethod: selectedMethod
+        )
+        hunt.normalImageData = imageData
         context.insert(hunt)
         Task {
             try? await NotificationService.shared.requestAuthorization()

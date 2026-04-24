@@ -5,6 +5,7 @@ import PhotosUI
 struct AddHuntView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Query private var allHunts: [PokemonHunt]
 
     @State private var viewModel = AddHuntViewModel()
     @State private var selectedPhotoItem: PhotosPickerItem?
@@ -14,6 +15,8 @@ struct AddHuntView: View {
             Form {
                 nameSection
                 photoSection
+                gameSection
+                methodSection
                 charmeSection
             }
             .navigationTitle("Nouvelle chasse")
@@ -24,7 +27,7 @@ struct AddHuntView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Créer") {
-                        viewModel.createHunt(context: modelContext)
+                        viewModel.createHunt(context: modelContext, allHunts: allHunts)
                         dismiss()
                     }
                     .disabled(!viewModel.isFormValid)
@@ -56,7 +59,7 @@ struct AddHuntView: View {
     }
 
     private var photoSection: some View {
-        Section("Photo (optionnel)") {
+        Section("Photo normale (optionnel)") {
             PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
                 HStack {
                     photoPickerContent
@@ -84,6 +87,26 @@ struct AddHuntView: View {
             Image(systemName: "photo.badge.plus")
                 .foregroundStyle(ThemeManager.shared.accentColor)
                 .accessibilityHidden(true)
+        }
+    }
+
+    private var gameSection: some View {
+        Section("Jeu") {
+            Picker("Jeu Pokémon", selection: $viewModel.selectedGame) {
+                ForEach(PokemonGame.allCases, id: \.rawValue) { game in
+                    Text(game.displayName).tag(game)
+                }
+            }
+        }
+    }
+
+    private var methodSection: some View {
+        Section("Méthode de chasse") {
+            Picker("Méthode", selection: $viewModel.selectedMethod) {
+                ForEach(HuntMethod.allCases, id: \.rawValue) { method in
+                    Text(method.displayName).tag(method)
+                }
+            }
         }
     }
 

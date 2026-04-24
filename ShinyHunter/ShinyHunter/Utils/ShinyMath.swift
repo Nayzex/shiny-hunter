@@ -12,7 +12,7 @@ enum ShinyMath {
         guard rate > 0, attempts > 0 else { return "Dans la moyenne" }
         let ratio = Double(attempts) / Double(rate)
         switch ratio {
-        case ..<0.25:    return "Très chanceux"
+        case ..<0.25:     return "Très chanceux"
         case 0.25..<0.75: return "Chanceux"
         case 0.75..<1.5:  return "Dans la moyenne"
         case 1.5..<2.5:   return "Malchanceux"
@@ -23,5 +23,15 @@ enum ShinyMath {
     static func probabilityOfFindingByNow(attempts: Int, rate: Int) -> String {
         let probability = cumulativeProbability(attempts: attempts, rate: rate)
         return String(format: "Tu avais %.1f%% de chances de le trouver en autant d'essais", probability)
+    }
+
+    static func paceDescription(resetsPerHour: Double, hoursRemaining: Double) -> String {
+        let speed = Int(resetsPerHour.rounded())
+        if hoursRemaining < 1 {
+            let minutes = Int((hoursRemaining * 60).rounded())
+            return "À ce rythme : ~\(speed) resets/h — encore ~\(minutes) min si tu es dans la moyenne"
+        }
+        let hours = String(format: "%.1f", hoursRemaining)
+        return "À ce rythme : ~\(speed) resets/h — encore ~\(hours)h si tu es dans la moyenne"
     }
 }

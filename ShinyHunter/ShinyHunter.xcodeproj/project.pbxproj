@@ -42,8 +42,18 @@
 		A290F7382F993E6A00DBCC21 /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CLAUDE.md; sourceTree = "<group>"; };
 		A290F73A2F993E8600DBCC21 /* QUALITY.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = QUALITY.md; sourceTree = "<group>"; };
 		A290F7862F9AA48B00DBCC21 /* FEATURES.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = FEATURES.md; sourceTree = "<group>"; };
-		A290F7B02F9BB10000DBCC21 /* ShinyHunterWidget.appex */ = {isa = PBXFileReference; explicitFileType = wrapper.app-extension; includeInIndex = 0; path = ShinyHunterWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A290F7B02F9BB10000DBCC21 /* ShinyHunterWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShinyHunterWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A290F7BD2F9BB10000DBCC21 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Info.plist",
+			);
+			target = A290F7B22F9BB10000DBCC21 /* ShinyHunterWidget */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A290F72A2F993CA300DBCC21 /* ShinyHunter */ = {
@@ -53,6 +63,9 @@
 		};
 		A290F7B12F9BB10000DBCC21 /* ShinyHunterWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A290F7BD2F9BB10000DBCC21 /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
+			);
 			path = ShinyHunterWidget;
 			sourceTree = "<group>";
 		};

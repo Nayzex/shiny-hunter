@@ -3,7 +3,7 @@ import SwiftUI
 struct SettingsView: View {
     @State private var viewModel = SettingsViewModel()
     @State private var soundService = SoundService.shared
-    @State private var themeManager = ThemeManager.shared
+    @Environment(ThemeManager.self) private var themeManager
 
     var body: some View {
         NavigationStack {
@@ -44,6 +44,7 @@ struct SettingsView: View {
                 )
                 .padding(2)
         }
+        .buttonStyle(.plain)
         .accessibilityLabel(option.displayName)
         .accessibilityAddTraits(themeManager.selectedOption == option ? .isSelected : [])
     }
@@ -80,4 +81,5 @@ struct SettingsView: View {
 
 #Preview {
     SettingsView()
+        .environment(ThemeManager.shared)
 }

@@ -3,6 +3,7 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(AppDelegate.self) private var delegate
+    @Environment(ThemeManager.self) private var themeManager
     @State private var selectedTab = 0
 
     var body: some View {
@@ -13,14 +14,17 @@ struct ContentView: View {
             CapturedListView()
                 .tabItem { Label("Capturés", systemImage: "sparkles") }
                 .tag(1)
+            GalleryView()
+                .tabItem { Label("Galerie", systemImage: "square.grid.2x2") }
+                .tag(2)
             StatsView()
                 .tabItem { Label("Stats", systemImage: "chart.bar.fill") }
-                .tag(2)
+                .tag(3)
             SettingsView()
                 .tabItem { Label("Réglages", systemImage: "gearshape.fill") }
-                .tag(3)
+                .tag(4)
         }
-        .tint(ThemeManager.shared.accentColor)
+        .tint(themeManager.accentColor)
         .onAppear {
             if delegate.pendingShowAddHunt { selectedTab = 0 }
         }
@@ -33,5 +37,6 @@ struct ContentView: View {
 #Preview {
     ContentView()
         .environment(AppDelegate())
+        .environment(ThemeManager.shared)
         .modelContainer(for: [PokemonHunt.self, HuntSession.self], inMemory: true)
 }

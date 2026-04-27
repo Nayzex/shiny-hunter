@@ -9,6 +9,7 @@ struct ShinyHunterApp: App {
         WindowGroup {
             ContentView()
                 .environment(delegate)
+                .environment(ThemeManager.shared)
         }
         .modelContainer(for: [PokemonHunt.self, HuntSession.self])
     }

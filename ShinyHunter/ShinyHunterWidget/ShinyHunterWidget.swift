@@ -1,9 +1,13 @@
 import WidgetKit
 import SwiftUI
 
-private let appGroupID = "group.com.nayzex.shinyhunter"
-private let huntDataKey = "widgetHuntData"
-private let accentColor = Color(red: 1.0, green: 0.8, blue: 0.0)
+// MARK: — Constants
+
+private enum WidgetConstants {
+    static let appGroupID = "group.com.nayzex.shinyhunter"
+    static let huntDataKey = "widgetHuntData"
+    static let accentColor: Color = Color(red: 1.0, green: 0.8, blue: 0.0)
+}
 
 // MARK: — Data
 
@@ -22,8 +26,8 @@ struct WidgetHuntData {
 
     static func load() -> WidgetHuntData? {
         guard
-            let defaults = UserDefaults(suiteName: appGroupID),
-            let data = defaults.data(forKey: huntDataKey),
+            let defaults = UserDefaults(suiteName: WidgetConstants.appGroupID),
+            let data = defaults.data(forKey: WidgetConstants.huntDataKey),
             let payload = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
             let name = payload["pokemonName"] as? String,
             let attempts = payload["attempts"] as? Int,
@@ -85,7 +89,7 @@ struct ShinyHunterWidgetEntryView: View {
             Text("\(hunt.attempts)")
                 .font(.system(.title, design: .rounded, weight: .heavy))
                 .monospacedDigit()
-                .foregroundStyle(accentColor)
+                .foregroundStyle(WidgetConstants.accentColor)
             Text("resets")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
@@ -107,7 +111,7 @@ struct ShinyHunterWidgetEntryView: View {
                 Text("\(hunt.attempts)")
                     .font(.system(.title, design: .rounded, weight: .heavy))
                     .monospacedDigit()
-                    .foregroundStyle(accentColor)
+                    .foregroundStyle(WidgetConstants.accentColor)
                 Text("/ \(hunt.targetAttempts) resets")
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -149,7 +153,7 @@ struct CircularProgressWidgetView: View {
                 .stroke(Color(.systemGray5), lineWidth: 5)
             Circle()
                 .trim(from: 0, to: progress)
-                .stroke(accentColor, style: StrokeStyle(lineWidth: 5, lineCap: .round))
+                .stroke(WidgetConstants.accentColor, style: StrokeStyle(lineWidth: 5, lineCap: .round))
                 .rotationEffect(.degrees(-90))
         }
     }

@@ -10,6 +10,7 @@ final class HuntDetailViewModel {
     var showError = false
 
     private let hunt: PokemonHunt
+    private var modelContext: ModelContext?
     private let hapticService: HapticService
     private let notificationService: NotificationService
     private let soundService: SoundService
@@ -31,7 +32,7 @@ final class HuntDetailViewModel {
 
     // Calculé depuis hunt.sessions (observé via @Model)
     var paceDescription: String? {
-        let completedSessions = hunt.sessions.filter { $0.endedAt != nil }
+        let completedSessions = hunt.sessions.filter { $0.endedAt != nil && $0.resetsInSession > 0 }
         guard completedSessions.count >= 2 else { return nil }
 
         let totalResets = completedSessions.reduce(0) { $0 + $1.resetsInSession }
@@ -49,6 +50,7 @@ final class HuntDetailViewModel {
     }
 
     func startSession(context: ModelContext) {
+        modelContext = context
         let session = HuntSession()
         context.insert(session)
         hunt.sessions.append(session)
@@ -57,7 +59,12 @@ final class HuntDetailViewModel {
 
     func endSession() {
         guard let session = currentSession else { return }
-        session.endedAt = Date()
+        if session.resetsInSession == 0, let context = modelContext {
+            hunt.sessions.removeAll { $0.id == session.id }
+            context.delete(session)
+        } else {
+            session.endedAt = Date()
+        }
         currentSession = nil
     }
 

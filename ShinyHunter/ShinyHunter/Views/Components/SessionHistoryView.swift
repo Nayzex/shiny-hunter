@@ -4,7 +4,9 @@ struct SessionHistoryView: View {
     let sessions: [HuntSession]
 
     private var sortedSessions: [HuntSession] {
-        sessions.sorted { $0.startedAt > $1.startedAt }
+        sessions
+            .filter { $0.resetsInSession > 0 }
+            .sorted { $0.startedAt > $1.startedAt }
     }
 
     var body: some View {

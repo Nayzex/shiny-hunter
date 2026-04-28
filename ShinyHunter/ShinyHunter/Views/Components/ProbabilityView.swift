@@ -9,19 +9,19 @@ struct ProbabilityView: View {
     }
 
     var body: some View {
-        HStack {
+        VStack(spacing: 6) {
             Image(systemName: "chart.line.uptrend.xyaxis")
                 .foregroundStyle(ThemeManager.shared.accentColor)
                 .accessibilityHidden(true)
-            Text("Probabilité cumulée : ")
-                .foregroundStyle(.secondary)
             Text(String(format: "%.1f%%", probability))
-                .font(.title3.monospacedDigit())
+                .font(.subheadline.bold().monospacedDigit())
                 .foregroundStyle(probabilityColor)
                 .contentTransition(.numericText())
                 .animation(.default, value: probability)
+            Text("Probabilité cumulée")
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
-        .font(.title3)
     }
 
     private var probabilityColor: Color {

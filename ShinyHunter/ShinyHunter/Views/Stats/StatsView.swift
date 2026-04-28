@@ -67,7 +67,7 @@ struct StatsView: View {
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .cardStyle()
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(title) : \(value)")
@@ -189,7 +189,7 @@ struct StatsView: View {
                 .font(.subheadline.monospacedDigit())
                 .foregroundStyle(ThemeManager.shared.accentColor)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .cardStyle()
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(title) : \(name), \(detail)")

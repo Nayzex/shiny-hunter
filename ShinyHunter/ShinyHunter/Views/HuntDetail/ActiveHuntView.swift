@@ -14,6 +14,7 @@ struct ActiveHuntView: View {
     @State private var showHuntInfo = false
     @State private var showNotes = false
     @State private var selectedNormalPhoto: PhotosPickerItem?
+    @State private var isCounterHidden = false
 
     init(hunt: PokemonHunt) {
         self.hunt = hunt
@@ -25,8 +26,7 @@ struct ActiveHuntView: View {
             VStack(spacing: 24) {
                 headerSection
                 counterSection
-                paceSection
-                probabilitySection
+                infoRow
                 actionSection
                 huntInfoSection
                 notesSection
@@ -54,6 +54,18 @@ struct ActiveHuntView: View {
             guard let photo = selectedNormalPhoto,
                   let rawData = try? await photo.loadTransferable(type: Data.self) else { return }
             viewModel.processNormalImageData(rawData)
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        isCounterHidden.toggle()
+                    }
+                } label: {
+                    Image(systemName: isCounterHidden ? "eye.slash" : "eye")
+                }
+                .accessibilityLabel(isCounterHidden ? "Afficher le compteur" : "Masquer le compteur")
+            }
         }
         .alert("✨ Shiny, vraiment !?", isPresented: Bindable(viewModel).showShinyConfirmation) {
             Button("Oui !") { viewModel.confirmShiny(allHunts: allHunts) }
@@ -105,23 +117,21 @@ struct ActiveHuntView: View {
             ProgressBarView(attempts: hunt.attempts, targetAttempts: hunt.targetAttempts)
         }
         .cardStyle()
+        .blur(radius: isCounterHidden ? 14 : 0)
+        .accessibilityHidden(isCounterHidden)
     }
 
     @ViewBuilder
-    private var paceSection: some View {
-        if let pace = viewModel.paceDescription {
-            HStack(spacing: 8) {
-                Image(systemName: "speedometer")
-                    .foregroundStyle(ThemeManager.shared.accentColor)
-                    .accessibilityHidden(true)
-                Text(pace)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+    private var infoRow: some View {
+        let blurred = isCounterHidden
+        HStack(alignment: .top, spacing: 12) {
+            probabilitySection
+            if viewModel.paceDescription != nil {
+                paceSection
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .cardStyle()
-            .accessibilityLabel(pace)
         }
+        .blur(radius: blurred ? 14 : 0)
+        .accessibilityHidden(blurred)
     }
 
     private var probabilitySection: some View {
@@ -131,7 +141,26 @@ struct ActiveHuntView: View {
                 StreakBadgeView(currentSessionResets: session.resetsInSession)
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .cardStyle()
+    }
+
+    @ViewBuilder
+    private var paceSection: some View {
+        if let pace = viewModel.paceDescription {
+            VStack(spacing: 6) {
+                Image(systemName: "speedometer")
+                    .foregroundStyle(ThemeManager.shared.accentColor)
+                    .accessibilityHidden(true)
+                Text(pace)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .cardStyle()
+            .accessibilityLabel(pace)
+        }
     }
 
     private var actionSection: some View {
